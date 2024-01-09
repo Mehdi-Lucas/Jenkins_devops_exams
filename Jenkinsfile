@@ -15,6 +15,7 @@ stages
                 script 
                 {
                     sh '''
+                    docker rm -f jenkins
                     cd movie-service
                     docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG -f Dockerfile .
                     '''
@@ -103,6 +104,7 @@ stages
 
                 script {
                 sh '''
+                docker rm -f jenkins
                 docker login -u $DOCKER_ID -p $DOCKER_PASS
                 docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
                 '''
