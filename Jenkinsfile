@@ -12,12 +12,11 @@ stages
         { // docker build movie service image stage
             steps
             {
-                script {
-                    dir('/movie-service') {
-                        sh '''
-                        docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG .
-                        '''
-                    }
+                script 
+                {
+                    sh '''
+                    docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG -f movie-service/Dockerfile .
+                    '''
                 }
             }
         }
@@ -26,12 +25,11 @@ stages
         { // docker build cast service image stage
             steps  
             {
-                script {
-                    dir('/cast-service') {
-                        sh '''
-                        docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
-                        '''
-                    }
+                script 
+                {
+                    sh '''
+                    docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG -f cast-service/Dockerfile .
+                    '''
                 }
             }
         }
