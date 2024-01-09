@@ -15,7 +15,8 @@ stages
                 script 
                 {
                     sh '''
-                    docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG -f movie-service/Dockerfile .
+                    cd movie-service
+                    docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG -f Dockerfile .
                     '''
                 }
             }
@@ -28,7 +29,8 @@ stages
                 script 
                 {
                     sh '''
-                    docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG -f cast-service/Dockerfile .
+                    cd cast-service
+                    docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG -f Dockerfile .
                     '''
                 }
             }
