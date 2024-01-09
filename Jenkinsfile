@@ -12,13 +12,12 @@ stages
         { // docker build movie service image stage
             steps
             {
-                script
-                {
-                sh '''
-                 docker rm -f jenkins
-                 docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG .
-                sleep 6
-                '''
+                script {
+                    dir('/movie-service') {
+                        sh '''
+                        docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG .
+                        '''
+                    }
                 }
             }
         }
@@ -27,13 +26,12 @@ stages
         { // docker build cast service image stage
             steps  
             {
-                script  
-                {
-                sh '''
-                 docker rm -f jenkins
-                 docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
-                sleep 6
-                '''
+                script {
+                    dir('/cast-service') {
+                        sh '''
+                        docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
+                        '''
+                    }
                 }
             }
         }
