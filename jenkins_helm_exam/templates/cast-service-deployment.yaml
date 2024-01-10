@@ -33,7 +33,6 @@ spec:
         image:
           repository: mehdilucasammar/cast-service-exam:{{ .Values.tag | default .Chart.AppVersion }}"                                                  
           pullPolicy: IfNotPresent
-          tag: ""
         command:
           - "uvicorn"
           - "app.main:app"
