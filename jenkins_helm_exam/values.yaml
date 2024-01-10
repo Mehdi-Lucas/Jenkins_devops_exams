@@ -15,9 +15,10 @@ cast_db:
 movie_service:
   databaseURI: postgresql://movie_db_username:movie_db_password@movie-db/movie_db_dev
   castServiceHostURL: http://cast-service:8000/api/v1/casts/
-
+  tag: ""
 cast_service:
   databaseURI: postgresql://cast_db_username:cast_db_password@cast-db/cast_db_dev
+  tag: ""
 
 nginx:
   image: nginx:latest
