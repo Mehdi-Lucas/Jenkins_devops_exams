@@ -31,7 +31,7 @@ spec:
       - name: cast-service
         build: ./cast-service
         image:
-          repository: mehdilucasammar/cast-service-exam:{{ .Values.image.tag | default .Chart.AppVersion }}"                                                  
+          repository: mehdilucasammar/cast-service-exam:{{ .Values.tag | default .Chart.AppVersion }}"                                                  
           pullPolicy: IfNotPresent
           tag: ""
         command:
