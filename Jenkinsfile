@@ -14,8 +14,9 @@ stages
             {
                 script 
                 {
+                    sh 'docker stop jenkins-movie-service || true'
+                    sh 'docker rm jenkins-movie-service || true'
                     sh '''
-                    docker rm -f jenkins
                     cd movie-service
                     docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG -f Dockerfile .
                     '''
@@ -66,6 +67,8 @@ stages
             {
                 script 
                 {
+                    sh 'docker stop jenkins-cast-service || true'
+                    sh 'docker rm jenkins-cast-service || true'
                     sh '''
                     cd cast-service
                     docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG -f Dockerfile .
