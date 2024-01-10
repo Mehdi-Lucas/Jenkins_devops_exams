@@ -31,7 +31,7 @@ spec:
       - name: movie-service
         build: ./movie-service
         image:
-          repository: mehdilucasammar/movie-service-exam:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          repository: mehdilucasammar/movie-service-exam:{{ .Values.tag | default .Chart.AppVersion }}"
           pullPolicy: IfNotPresent
           tag: ""
         command:
