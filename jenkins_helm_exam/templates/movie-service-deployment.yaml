@@ -30,7 +30,7 @@ spec:
       containers:
       - name: movie-service
         build: ./movie-service
-        image: mehdilucasammar/movie-service-exam:{{ .Values.tag | default .Chart.AppVersion }}
+        image: mehdilucasammar/movie-service-exam:{{ .Values.tag }}
         imagePullPolicy: IfNotPresent
         command:
           - "uvicorn"
