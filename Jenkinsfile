@@ -179,18 +179,15 @@ stages
             environment {
                 KUBECONFIG = credentials("config")
             }
+            when {
+                expression { env.BRANCH_NAME == 'master' }
+            }
             steps {
-                // Add a condition to check if the branch is master
                 script {
-                    def isMasterBranch = env.BRANCH_NAME == 'master'
-                    if (isMasterBranch) {
-                        // Create an Approval Button with a timeout of 15 minutes.
-                        // This requires manual validation to deploy to the production environment
-                        timeout(time: 15, unit: "MINUTES") {
-                            input message: 'Do you want to deploy in production?', ok: 'Yes'
-                        }
-                    } else {
-                        echo "Skipping manual validation for non master branch: ${env.BRANCH_NAME}"
+                    // Create an Approval Button with a timeout of 15 minutes.
+                    // This requires manual validation to deploy to the production environment
+                    timeout(time: 15, unit: "MINUTES") {
+                        input message: 'Do you want to deploy in production?', ok: 'Yes'
                     }
                 }
         
@@ -205,6 +202,13 @@ stages
                     sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                     helm upgrade --install app jenkins_helm_exam --values=values.yml --namespace prod
                     '''
+                }
+            }
+            else {
+                steps {
+                    script {
+                        echo "Not deploying to production because the build is not on the master branch."
+                    }
                 }
             }
         }
