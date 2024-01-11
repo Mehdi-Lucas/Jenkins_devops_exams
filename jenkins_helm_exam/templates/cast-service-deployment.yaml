@@ -30,7 +30,7 @@ spec:
       containers:
       - name: cast-service
         build: ./cast-service
-        image: "mehdilucasammar/cast-service-exam:{{ .Values.tag }}"
+        image: mehdilucasammar/cast-service-exam:{{ .Values.cast_service.tag }}
         imagePullPolicy: IfNotPresent
         command:
           - "uvicorn"
