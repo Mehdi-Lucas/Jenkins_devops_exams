@@ -4,6 +4,7 @@ DOCKER_ID = "mehdilucasammar" // replace this with your docker-id
 DOCKER_MOVIE_IMAGE = "movie-service-exam"
 DOCKER_CAST_IMAGE = "cast-service-exam"
 DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
+BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}" // See: https://stackoverflow.com/questions/42383273/get-git-branch-name-in-jenkins-pipeline-jenkinsfile
 }
 agent any // Jenkins will be able to select all available agents
 stages
@@ -182,7 +183,7 @@ stages
             steps {
                 script {
                     // Check if the branch is master
-                    def isMasterBranch = env.BRANCH_NAME == 'master'
+                    def isMasterBranch = BRANCH_NAME == 'master'
         
                     // If on master, request manual approval
                     if (isMasterBranch) {
@@ -203,7 +204,7 @@ stages
                         }
                     } else {
                         echo "Not deploying to production because the build is not on the master branch, branch name:"
-                        echo env.GIT_BRANCH
+                        echo BRANCH_NAME
                     }
                 }
             }
