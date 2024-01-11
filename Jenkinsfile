@@ -135,5 +135,78 @@ stages
                 }
             }
         }
+        stage('Deploiement en QA'){
+        environment
+        {
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        }
+            steps {
+                script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp jenkins_helm_exam/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app jenkins_helm_exam --values=values.yml --namespace QA
+                '''
+                }
+            }
+        }
+        stage('Deploiement en staging'){
+        environment
+        {
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        }
+            steps {
+                script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp jenkins_helm_exam/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app jenkins_helm_exam --values=values.yml --namespace staging
+                '''
+                }
+            }
+        }
+        stage('Deploiement en prod') {
+            environment {
+                KUBECONFIG = credentials("config")
+            }
+            steps {
+                // Add a condition to check if the branch is master
+                script {
+                    def isMasterBranch = env.BRANCH_NAME == 'master'
+                    if (isMasterBranch) {
+                        // Create an Approval Button with a timeout of 15 minutes.
+                        // This requires manual validation to deploy to the production environment
+                        timeout(time: 15, unit: "MINUTES") {
+                            input message: 'Do you want to deploy in production?', ok: 'Yes'
+                        }
+                    } else {
+                        echo "Skipping manual validation for non master branch: ${env.BRANCH_NAME}"
+                    }
+                }
+        
+                script {
+                    sh '''
+                    rm -Rf .kube
+                    mkdir .kube
+                    ls
+                    cat $KUBECONFIG > .kube/config
+                    cp jenkins_helm_exam/values.yaml values.yml
+                    cat values.yml
+                    sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                    helm upgrade --install app jenkins_helm_exam --values=values.yml --namespace prod
+                    '''
+                }
+            }
+        }
     }
 }
