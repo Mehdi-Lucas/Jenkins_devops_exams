@@ -179,19 +179,19 @@ stages
             environment {
                 KUBECONFIG = credentials("config")
             }
-            when {
-                expression { env.BRANCH_NAME == 'master' }
-            }
             steps {
                 script {
-                    // Create an Approval Button with a timeout of 15 minutes.
-                    // This requires manual validation to deploy to the production environment
-                    timeout(time: 15, unit: "MINUTES") {
-                        input message: 'Do you want to deploy in production?', ok: 'Yes'
-                    }
-                }
+                    // Check if the branch is master
+                    def isMasterBranch = env.BRANCH_NAME == 'master'
         
-                script {
+                    // If on master, request manual approval
+                    if (isMasterBranch) {
+                        timeout(time: 15, unit: "MINUTES") {
+                            input message: 'Do you want to deploy in production?', ok: 'Yes'
+                        }
+                    } else {
+                        echo "Not deploying to production because the build is not on the master branch."
+                    }
                     sh '''
                     rm -Rf .kube
                     mkdir .kube
@@ -204,13 +204,7 @@ stages
                     '''
                 }
             }
-            else {
-                steps {
-                    script {
-                        echo "Not deploying to production because the build is not on the master branch."
-                    }
-                }
-            }
         }
+
     }
 }
