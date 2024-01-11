@@ -189,19 +189,21 @@ stages
                         timeout(time: 15, unit: "MINUTES") {
                             input message: 'Do you want to deploy in production?', ok: 'Yes'
                         }
+                        script {
+                        sh '''
+                        rm -Rf .kube
+                        mkdir .kube
+                        ls
+                        cat $KUBECONFIG > .kube/config
+                        cp fastapi/values.yaml values.yml
+                        cat values.yml
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                        helm upgrade --install app fastapi --values=values.yml --namespace prod
+                        '''
+                        }
                     } else {
                         echo "Not deploying to production because the build is not on the master branch."
                     }
-                    sh '''
-                    rm -Rf .kube
-                    mkdir .kube
-                    ls
-                    cat $KUBECONFIG > .kube/config
-                    cp jenkins_helm_exam/values.yaml values.yml
-                    cat values.yml
-                    sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                    helm upgrade --install app jenkins_helm_exam --values=values.yml --namespace prod
-                    '''
                 }
             }
         }
