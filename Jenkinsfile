@@ -203,7 +203,7 @@ stages
                         }
                     } else {
                         echo "Not deploying to production because the build is not on the master branch, branch name:"
-                        echo env.BRANCH_NAME
+                        echo env.GIT_BRANCH
                     }
                 }
             }
