@@ -129,6 +129,7 @@ stages
                 cp jenkins_helm_exam/values.yaml values.yml
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                cat values.yml
                 helm upgrade --install app jenkins_helm_exam --values=values.yml --namespace dev
                 '''
                 }
