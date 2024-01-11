@@ -30,9 +30,8 @@ spec:
       containers:
       - name: movie-service
         build: ./movie-service
-        image:
-          repository: mehdilucasammar/movie-service-exam:{{ .Values.tag | default .Chart.AppVersion }}"
-          pullPolicy: IfNotPresent
+        image: mehdilucasammar/movie-service-exam:{{ .Values.tag | default .Chart.AppVersion }}
+        imagePullPolicy: IfNotPresent
         command:
           - "uvicorn"
           - "app.main:app"
