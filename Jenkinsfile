@@ -196,10 +196,10 @@ stages
                         mkdir .kube
                         ls
                         cat $KUBECONFIG > .kube/config
-                        cp fastapi/values.yaml values.yml
+                        cp jenkins_helm_exam/values.yaml values.yml
                         cat values.yml
                         sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                        helm upgrade --install app fastapi --values=values.yml --namespace prod
+                        helm upgrade --install app jenkins_helm_exam --values=values.yml --namespace prod
                         '''
                         }
                     } else {
